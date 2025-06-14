@@ -11,7 +11,7 @@ After checking these things, it adjusts the patch file with the corrected inject
 
 An [armips](https://github.com/Kingcom/armips) binary is bundled into the release, so no need to install anything!
 
-## Usage:
+## 1. Usage:
 
 1. Download the latest [release](https://github.com/KalaayPT/g4patcher/releases)
 2. Run G4Patcher
@@ -20,18 +20,18 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 5. If everything is fine, youll get a confirmation message, if not, you'll get a message telling you what the issue is
 6. Press Enter to close
 
-## Limitations:
+## 2. Limitations:
 
 - The program doesn't check if the patch is already applied, so if you apply a patch twice, it will duplicate the previous one. The patch will still work, but more space in you synthOverlay will be used up.
 - The program doesnt check compression either (yet), so make sure that the hook overlay required by the patch is not compressed. 
 
-## Included patches:
+## 3. Included patches:
 
-### EV+IV Checker (HG/SS/PLAT)
+### 3.1 EV+IV Checker (HG/SS/PLAT)
 
 When applied, holding R while opening the summary/switching to a pokemon in the summary screen will display IVs instead of stats. L for EVs.
 
-### ButtonScript (HG/SS/PLAT)
+### 3.2 ButtonScript (HG/SS/PLAT)
 
 ATTENTION: this patch requires you to have an uncompressed overlay (0001 for HG/SS, 0005 for Plat)!
 
@@ -43,7 +43,7 @@ Neither of these scripts exist in the base game, so you will have to create them
 
 You can change the button and the script in the patch before applying.
 
-### Dynamic Encounters and Weather (HG/SS/PLAT)
+### 3.3 Dynamic Encounters and Weather (HG/SS/PLAT)
 
 This patch overwrites an unused scripting command allowing for dynamic encounters and weather.
 
@@ -60,7 +60,7 @@ This patch overwrites an unused scripting command allowing for dynamic encounter
 
 Important: In HG/SS you will need to edit the patch file to set the encounter bank.
 
-### Apply a Status Condition to a Pokemon in the Party from the Overworld (HG/SS/PLAT)
+### 3.4 Apply a Status Condition to a Pokemon in the Party from the Overworld (HG/SS/PLAT)
 
 This patch repurposes an unused scripting command to allow setting status conditions on Pokémon in the party from the overworld.
 
@@ -92,24 +92,24 @@ The command will:
 | TOXIC_COUNTER_2             | (1 << 10) |
 | TOXIC_COUNTER_3             | (1 << 11) |
 
-### Preventing the player from using items in trainer battles (PLAT)
+### 3.5 Preventing the player from using items in trainer battles (PLAT)
 
 This patch will prevent the player from using any items from the bag in a trainer battle.
 The message shown will be the same as when you try to use items in a link battle.
 
-### AI Item use fix (PLAT)
+### 3.6 AI Item use fix (PLAT)
 
 Have you ever noticed that the AI uses items in battle in a weird way? This is actually because the AI routine that is supposed to determine what item a trainer should use is bugged.
 Under certain (common) conditions, the AI will use up all of its items at once.
 
-### Force wild encounters to be shiny (PLAT)
+### 3.7 Force wild encounters to be shiny (PLAT)
 
 When a certain flag is set (Flag 2570 by default), this patch will force all wild encounters to be shiny, regardless of the player's ID or SID.
 You can change the flag in the patch file before applying.
 
 (more to come)
 
-## Contributing:
+## 4. Contributing:
 
 If you want to contribute your own patches, you can use the included ones as templates as to what yours are supposed to look like. 
 
