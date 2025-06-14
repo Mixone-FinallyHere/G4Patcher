@@ -5,6 +5,7 @@ edition = "2021"
 repository = "https://github.com/KalaayPT/g4patcher"
 authors = ["KalaayPT <contact@kalaay.dev>"]
 description = "A code injection patcher tool for Pokémon Gen 4 ROM hacks"
+license = "MIT"
 
 [package.metadata.wix]
 upgrade-guid = "BD0B38A0-4C9B-469F-AA60-23D7DF6F5C16"
