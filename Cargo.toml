@@ -18,7 +18,6 @@ include = [
     "./assets",
     "./patches"
 ]
-allow-dirty = true
 
 [dependencies]
 log = "0.4.27"
