@@ -18,9 +18,7 @@ include = [
     "./assets",
     "./patches"
 ]
-
-[package.metadata.dist.github-workflows]
-release = { locked = true }
+allow-dirty = true
 
 [dependencies]
 log = "0.4.27"
