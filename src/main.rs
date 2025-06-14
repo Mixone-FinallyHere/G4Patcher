@@ -173,7 +173,7 @@ fn insert_corrected_offset(asm_path: &str, new_addr: u32) -> std::io::Result<Pat
 }
 
 
-fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &PathBuf) -> std::io::Result<()> {
+fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &PathBuf) -> io::Result<()> {
     // Get absolute path to .asm
     //let full_asm_path = fs::canonicalize(asm_path)?;
 
@@ -191,7 +191,10 @@ fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &PathBuf) -> std::io::Resu
 
     if !status.success() {
         println!("armips failed with exit code: {:?}", status.code().unwrap());
-        std::process::exit(1);
+        return Err(io::Error::new(
+            io::ErrorKind::Other,
+            "armips failed to run",
+        ));
     }
 
     Ok(())
@@ -206,7 +209,7 @@ fn enter_to_exit() -> io::Result<()> {
 
 fn main() -> io::Result<()> {
 
-    println!("Welcome to the Platinum/HeartGold code injection patcher!\nPlease select your unpacked ROM folder");
+    println!("Welcome to the Platinum/HGSS code injection patcher!\nPlease select your unpacked ROM folder");
 
     // Get the project path from the user
     let project_path = get_project_path().display().to_string();
@@ -260,8 +263,11 @@ fn main() -> io::Result<()> {
     insert_corrected_offset(&patch_path, corrected_offset)
         .expect("Failed to correct offset in asm file");
 
-    run_armips(&patch_path, &project_path, &exe_dir).expect("Failed to run armips");
-    println!("\narmips ran successfully, patch applied! You can now repack your ROM.\n");
+    if let Ok(()) = run_armips(&patch_path, &project_path, &exe_dir) {
+        println!("\narmips ran successfully, patch applied! You can now repack your ROM.\n");
+    } else {
+        return enter_to_exit()
+    }
 
     enter_to_exit()
 }
