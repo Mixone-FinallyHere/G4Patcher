@@ -19,6 +19,9 @@ include = [
     "./patches"
 ]
 
+[package.metadata.dist.github-workflows]
+release = { locked = true }
+
 [dependencies]
 log = "0.4.27"
 rfd = "0.15.3"
