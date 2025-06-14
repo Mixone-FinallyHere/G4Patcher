@@ -19,6 +19,7 @@
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
+.ascii "ButtonScript"
 
 AButton equ 1
 BButton equ 2
