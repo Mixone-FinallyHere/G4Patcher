@@ -43,6 +43,70 @@ Neither of these scripts exist in the base game, so you will have to create them
 
 You can change the button and the script in the patch before applying.
 
+### Dynamic Encounters and Weather (HG/SS/PLAT)
+
+This patch overwrites an unused scripting command allowing for dynamic encounters and weather.
+
+- In **Platinum** the overwritten command is `DummySetWeather` (command `CMD_0x09C`).
+- In **HG/SS** the overwritten command is `DummyTrainerBattle` (command `CMD_0x0DF`).
+- The command uses variables defined at the top of the patch file. By default:
+```
+  | Variable            | Default Value | Purpose                                                                 |
+  |---------------------|---------------|-------------------------------------------------------------------------|
+  | `ScriptVar_Param1`  | `0x4015`      | Mode: `0` = encounters, `>=1` = weather                                 |
+  | `ScriptVar_Param2`  | `0x4016`      | Encounter bank or weather type                                          |
+  | `ScriptVar_Param3`  | `0x4017`      | Weather animation: `0` = skip, `1` = play (unused for encounters)       |
+```
+
+Important: In HG/SS you will need to edit the patch file to set the encounter bank.
+
+### Apply a Status Condition to a Pokemon in the Party from the Overworld (HG/SS/PLAT)
+
+This patch repurposes an unused scripting command to allow setting status conditions on Pokémon in the party from the overworld.
+
+- **Platinum**: The unused command is `DummyUnderground` or `CMD_335`. This command is actually used once in the game, so it will need to be removed from the script it is used in. 
+- **HeartGold/SoulSilver**: The unused command is `CMD_228 [2B]`. The two-byte parameter is required for DSPRE but unused.
+
+The command uses the following variables:
+- `0x8004`: Stores the party slot.
+- `0x8005`: Stores the status condition.
+
+The command will:
+- Apply the specified status condition to the Pokémon in the given party slot.
+- **Not** apply status to Pokémon already affected by a status condition.
+- **Not** avoid burning Fire-types or poisoning Poison-types. Additional scripting is required to prevent these cases if needed.
+
+| Status Condition            | Value     |
+|-----------------------------|-----------|
+| NONE                        |  0        |
+| SLEEP_COUNTER_0             | (1 << 0)  |
+| SLEEP_COUNTER_1             | (1 << 1)  |
+| SLEEP_COUNTER_2             | (1 << 2)  |
+| POISON                      | (1 << 3)  |
+| BURN                        | (1 << 4)  |
+| FREEZE                      | (1 << 5)  |
+| PARALYSIS                   | (1 << 6)  |
+| TOXIC                       | (1 << 7)  |
+| TOXIC_COUNTER_0             | (1 << 8)  |
+| TOXIC_COUNTER_1             | (1 << 9)  |
+| TOXIC_COUNTER_2             | (1 << 10) |
+| TOXIC_COUNTER_3             | (1 << 11) |
+
+### Preventing the player from using items in trainer battles (PLAT)
+
+This patch will prevent the player from using any items from the bag in a trainer battle.
+The message shown will be the same as when you try to use items in a link battle.
+
+### AI Item use fix (PLAT)
+
+Have you ever noticed that the AI uses items in battle in a weird way? This is actually because the AI routine that is supposed to determine what item a trainer should use is bugged.
+Under certain (common) conditions, the AI will use up all of its items at once.
+
+### Force wild encounters to be shiny (PLAT)
+
+When a certain flag is set (Flag 2570 by default), this patch will force all wild encounters to be shiny, regardless of the player's ID or SID.
+You can change the flag in the patch file before applying.
+
 (more to come)
 
 ## Contributing:
