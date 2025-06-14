@@ -1,4 +1,4 @@
-; EVIV_HG.asm
+; EVIV_HG_SS.asm
 
 .nds
 .thumb
