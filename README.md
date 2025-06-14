@@ -13,11 +13,12 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ## Usage:
 
-1. Run G4Patcher
-2. Select your unpacked ROM folder
-3. Select the patch
-4. If everything is fine, youll get a confirmation message, if not, you'll get a message telling you what the issue is
-5. Press Enter to close
+1. Download the latest [release](https://github.com/KalaayPT/g4patcher/releases)
+2. Run G4Patcher
+3. Select your unpacked ROM folder
+4. Select the patch
+5. If everything is fine, youll get a confirmation message, if not, you'll get a message telling you what the issue is
+6. Press Enter to close
 
 ## Included patches:
 
