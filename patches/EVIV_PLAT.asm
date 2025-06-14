@@ -13,11 +13,11 @@
 .close
 
 
-; ------- Write function to overlay_0000 -------
+; ------- Write function to synthOverlay 0009 -------
 .open "unpacked/synthOverlay/0009", 0x023C8000
 
 
-INJECT_ADDR equ 0x023C8750
+INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
 
 EV_IV_Viewer:

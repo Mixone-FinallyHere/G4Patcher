@@ -9,7 +9,7 @@ This program is purely cli. It prompts you to select an unpacked ROM folder (suc
 
 After checking these things, it adjusts the patch file with the corrected injection address and runs the patch through armips.
 
-An [armips](https://github.com/Kingcom/armips) binary is bundled into the release, so no need to install anything else!
+An [armips](https://github.com/Kingcom/armips) binary is bundled into the release, so no need to install anything!
 
 ## Usage:
 
@@ -20,20 +20,39 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 5. If everything is fine, youll get a confirmation message, if not, you'll get a message telling you what the issue is
 6. Press Enter to close
 
+## Limitations:
+
+- The program doesn't check if the patch is already applied, so if you apply a patch twice, it will duplicate the previous one. The patch will still work, but more space in you synthOverlay will be used up.
+- The program doesnt check compression either (yet), so make sure that the hook overlay required by the patch is not compressed. 
+
 ## Included patches:
 
 ### EV+IV Checker (HG/SS/PLAT)
 
 When applied, holding R while opening the summary/switching to a pokemon in the summary screen will display IVs instead of stats. L for EVs.
 
+### ButtonScript (HG/SS/PLAT)
+
+ATTENTION: this patch requires you to have an uncompressed overlay (0001 for HG/SS, 0005 for Plat)!
+
+When applied, a given button (default: Start) will execute a script when pressed in the overworld. This is usually used to implement a portable PC, but can be used with other scripts as well.
+
+In HG/SS, the script is set to CommonScript 2072 (Script 73 in Script file 3), in Platinum it is set to CommonScript 2058 (Script 59 in Script file 211).
+
+Neither of these scripts exist in the base game, so you will have to create them yourself. This is intentional, so that you can write a PC script that suppresses animations when called through the button.
+
+You can change the button and the script in the patch before applying.
+
+(more to come)
+
 ## Contributing:
 
-If you want to dontribute your own patches, you can use the included ones as templates as to what yours are supposed to look like. 
+If you want to contribute your own patches, you can use the included ones as templates as to what yours are supposed to look like. 
 
 Make sure that:
 1. The patch name is clearly labeled with the ROM it is to be applied to (such as "_HG")
 2. The patch includes a:
-```armasm
+```asm
 INJECT_ADDR equ 0x023C8750
 .org INJECT_ADDR
 ```

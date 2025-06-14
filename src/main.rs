@@ -123,7 +123,7 @@ fn is_arm9_expanded(project_path: &str, game_version: &str) -> bool {
 /// If the patch path contains "_HG", it returns the overlay for HeartGold (0000).
 /// If it contains "_PLAT", it returns the overlay for Platinum (0009).
 ///
-/// make sure to label patches accordingly!!!
+/// Make sure to label patches accordingly!!!
 fn determine_game_overlay(patch_path: &str) -> String {
     if patch_path.contains("_HG") {
         GAME_DEPENDENT_OVERLAY_HG.to_string()
@@ -138,7 +138,7 @@ fn determine_game_overlay(patch_path: &str) -> String {
 /// where there is at least `required_size` of 0x00 space.
 /// The address must end in 0 (i.e., multiple of 0x10).
 /// Find the first offset aligned to 0x10 (ending in 0),
-/// with at least `required_size` contiguous 0x00 bytes.
+/// with at least `required_size` continuous 0x00 bytes.
 pub fn find_injection_offset(data: &[u8], required_size: usize) -> Option<usize> {
     let mut i = 0;
 
@@ -212,6 +212,14 @@ fn main() -> io::Result<()> {
     let project_path = get_project_path().display().to_string();
     println!("Game version: {}", determine_game_version(&project_path));
 
+    // Check if the arm9 is expanded, if not, prompt the user to expand it
+    if is_arm9_expanded(&project_path, determine_game_version(&project_path)) {
+        println!("arm9 is expanded, proceeding");
+    } else {
+        println!("arm9 is not expanded, please expand it before running this tool.");
+        return enter_to_exit();
+    }
+
     // Get the directory of the executable for the patch file and armips locations
     let exe_dir = std::env::current_exe()
         .ok()
@@ -224,14 +232,6 @@ fn main() -> io::Result<()> {
     // Check if the patch is compatible with the selected ROM
     if !is_patch_compatible(&patch_path, &project_path) {
         println!("This patch is not compatible with this ROM, please select a compatible patch.");
-        return enter_to_exit();
-    }
-
-    // Check if the arm9 is expanded, if not, prompt the user to expand it
-    if is_arm9_expanded(&project_path, determine_game_version(&project_path)) {
-        println!("arm9 is expanded, proceeding");
-    } else {
-        println!("arm9 is not expanded, please expand it before running this tool.");
         return enter_to_exit();
     }
 
