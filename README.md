@@ -22,7 +22,7 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ## 2. Limitations:
 
-- The program doesn't check if the patch is already applied, so if you apply a patch twice, it will duplicate the previous one. The patch will still work, but more space in you synthOverlay will be used up.
+- The program doesn't check if the patch is already applied, so if you apply a patch twice, it will duplicate the previous one. The patch will still work, but more space in your synthOverlay will be used up.
 - The program doesnt check compression either (yet), so make sure that the hook overlay required by the patch is not compressed. 
 
 ## 3. Included patches:
