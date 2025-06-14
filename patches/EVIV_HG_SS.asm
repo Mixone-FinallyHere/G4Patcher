@@ -18,6 +18,7 @@
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
+.ascii "EV IV Viewer"
 
 EV_IV_Viewer:
     push {lr}
