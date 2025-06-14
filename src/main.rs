@@ -190,7 +190,7 @@ fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &PathBuf) -> std::io::Resu
         .status()?;
 
     if !status.success() {
-        println!("armips failed with exit code: {:?}", status.code());
+        println!("armips failed with exit code: {:?}", status.code().unwrap());
         std::process::exit(1);
     }
 

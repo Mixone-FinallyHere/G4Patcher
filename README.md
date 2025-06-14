@@ -21,7 +21,7 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ## Included patches:
 
-### EV+IV Checker (HG/SS)
+### EV+IV Checker (HG/SS/PLAT)
 
 When applied, holding R while opening the summary/switching to a pokemon in the summary screen will display IVs instead of stats. L for EVs.
 

@@ -20,16 +20,9 @@
 INJECT_ADDR equ 0x023C8750
 .org INJECT_ADDR
 
-; Constants
-MY_BUTTON_HOLD_STRING_RAM equ 0x023C8190
-NO_BUTTON_HOLD_STRING_RAM equ 0x023C81A0
-
 EV_IV_Viewer:
     push {lr}
     bl 0x0206FD00   ; original function
-
-    ldr  r0, =NO_BUTTON_HOLD_STRING_RAM
-    swi  0xFC
 
     ldr  r3, =0x021D110C     ; gSystem
     ldr  r2, [r3, #0x44]     ; heldKeys
