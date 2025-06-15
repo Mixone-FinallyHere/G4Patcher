@@ -76,21 +76,21 @@ The command will:
 - **Not** apply status to Pokémon already affected by a status condition.
 - **Not** avoid burning Fire-types or poisoning Poison-types. Additional scripting is required to prevent these cases if needed.
 
-| Status Condition            | Value     |
-|-----------------------------|-----------|
-| NONE                        |  0        |
-| SLEEP_COUNTER_0             | (1 << 0)  |
-| SLEEP_COUNTER_1             | (1 << 1)  |
-| SLEEP_COUNTER_2             | (1 << 2)  |
-| POISON                      | (1 << 3)  |
-| BURN                        | (1 << 4)  |
-| FREEZE                      | (1 << 5)  |
-| PARALYSIS                   | (1 << 6)  |
-| TOXIC                       | (1 << 7)  |
-| TOXIC_COUNTER_0             | (1 << 8)  |
-| TOXIC_COUNTER_1             | (1 << 9)  |
-| TOXIC_COUNTER_2             | (1 << 10) |
-| TOXIC_COUNTER_3             | (1 << 11) |
+| Status Condition            | Value     |  Decimal  |
+|-----------------------------|-----------|-----------|
+| NONE                        |  0        |         0 |
+| SLEEP_COUNTER_0             | (1 << 0)  |         1 |
+| SLEEP_COUNTER_1             | (1 << 1)  |         2 |
+| SLEEP_COUNTER_2             | (1 << 2)  |         4 |
+| POISON                      | (1 << 3)  |         8 |
+| BURN                        | (1 << 4)  |        16 |
+| FREEZE                      | (1 << 5)  |        32 |
+| PARALYSIS                   | (1 << 6)  |        64 |
+| TOXIC                       | (1 << 7)  |       128 |
+| TOXIC_COUNTER_0             | (1 << 8)  |       256 |
+| TOXIC_COUNTER_1             | (1 << 9)  |       512 |
+| TOXIC_COUNTER_2             | (1 << 10) |      1024 |
+| TOXIC_COUNTER_3             | (1 << 11) |      2048 |
 
 ### 3.5 Preventing the player from using items in trainer battles (PLAT)
 
