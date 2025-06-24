@@ -18,11 +18,12 @@
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
-.ascii "EV IV Viewer"
+.ascii "EV+IV Viewer"
 
 EV_IV_Viewer:
     push {lr}
     bl 0x0206FD00   ; original function
+    push {r0}
 
     ldr  r3, =0x021D110C     ; gSystem
     ldr  r2, [r3, #0x44]     ; heldKeys
@@ -108,7 +109,7 @@ EV_IV_Viewer:
     strb r1, [r0]
 
 .return:
-    pop {pc}
+    pop {r0,pc}
 
 .pool
 

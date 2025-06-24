@@ -19,7 +19,7 @@
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
-.ascii "EV IV Viewer"
+.ascii "EV+IV Viewer"
 
 EV_IV_Viewer:
     ; check if R is held
@@ -148,9 +148,9 @@ EV_IV_Viewer:
 
 .normal_return:
     ; replicate tail of original function:
-    ldr  r1, [sp, #4]        ; reencrypt flag
+    ldr  r1, [sp, #4]       ; reencrypt flag
     mov r0, r6              ; r0 = mon
-    bl   0x02073CD4          ; Pokemon_ExitDecryptionContext(mon, reencrypt)
+    bl   0x02073CD4         ; Pokemon_ExitDecryptionContext(mon, reencrypt)
     add  sp, #8
     pop  {r3, r4, r5, r6, r7, pc}
 
