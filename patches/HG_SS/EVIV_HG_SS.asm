@@ -42,11 +42,11 @@ EV_IV_Viewer:
     beq  .write_stats_ids
 
 .write_ev_ids:
-    mov r1, #0x7A
-    lsl r1, r1, #0x4
-    add r1, #0xC
-    ldr r0, [r7, r1]    ; Pointer in sumamry struct to string variable for some reason
-    bl 0x020263AC           ; String_SetEmpty
+    ;mov r1, #0x7A
+    ;lsl r1, r1, #0x4
+    ;add r1, #0xC
+    ;ldr r0, [r7, r1]    ; Pointer in sumamry struct to string variable for some reason
+    ;bl 0x020263AC           ; String_SetEmpty
     ldr r1, =evString      ; "EV" + EOS
     bl 0x020269A0           ; CopyU16ArrayToString
     mov r0, r7              ; Summary Struct param 1
