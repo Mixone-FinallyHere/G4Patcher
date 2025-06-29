@@ -115,27 +115,21 @@ write_stats_ids:
     strb r1, [r0]
     ldr r0, =0x0208d3c2
     mov r1, #0xA4
-    ;ldr r1, =0xA4
     strb r1, [r0]
     ldr r0, =0x0208d3ce
     mov r1, #0xA5
-    ;ldr r1, =0xA5
     strb r1, [r0]
     ldr r0, =0x0208d3da
     mov r1, #0xA6
-    ;ldr r1, =0xA6
     strb r1, [r0]
     ldr r0, =0x0208d3e6
     mov r1, #0xA8
-    ;ldr r1, =0xA7
     strb r1, [r0]
     ldr r0, =0x0208d3f2
     mov r1, #0xA9
-    ;ldr r1, =0xA9
     strb r1, [r0]
     ldr r0, =0x0208d3fe
     mov r1, #0xA7
-    ;ldr r1, =0xAA
     strb r1, [r0]
 
 refresh_screen:
