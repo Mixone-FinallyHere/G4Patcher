@@ -29,7 +29,7 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ### 3.1 EV+IV Checker (HG/SS/PLAT)
 
-When applied, holding R while opening the summary/switching to a pokemon in the summary screen will display IVs instead of stats. L for EVs.
+When applied, pressing R in the summary screen will cycle through IVs, EVs and base stats.
 
 ### 3.2 ButtonScript (HG/SS/PLAT)
 
