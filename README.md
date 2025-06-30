@@ -27,6 +27,8 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ## 3. Included patches:
 
+All of these have been tested on USA versions of either rom. If you use a different rom, make sure to make a safety copy before attempting to patch.
+
 ### 3.1 EV+IV Checker (HG/SS/PLAT)
 
 When applied, pressing R in the summary screen will cycle through IVs, EVs and base stats.
@@ -121,7 +123,7 @@ Make sure that:
 1. The patch name is clearly labeled with the ROM it is to be applied to (such as "_HG")
 2. The patch includes a:
 ```asm
-INJECT_ADDR equ 0x023C8750
+INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
 ```
-so that the script is able to adjust the injection address
+so that the script is able to adjust the injection address. Future updates will allow patches that don't need a synthetic overlay such as simple hexedits.
