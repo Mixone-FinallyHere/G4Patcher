@@ -1,9 +1,11 @@
 #![warn(clippy::nursery, clippy::pedantic)]
 
-use std::{fs, io};
-use std::io::{Read, Seek, SeekFrom};
+use crate::constants::{
+    HEARTGOLD, HEARTGOLD_BYTES, PLATINUM, PLATINUM_BYTES, SOULSILVER, SOUSILVER_BYTES,
+};
+use std::io::{BufRead, BufReader, Read, Seek, SeekFrom};
 use std::path::PathBuf;
-use crate::constants::{HEARTGOLD, HEARTGOLD_BYTES, PLATINUM, PLATINUM_BYTES, SOULSILVER, SOUSILVER_BYTES};
+use std::{fs, io};
 
 /// Determine the game version based on the header.bin file in the project path.
 ///
@@ -50,22 +52,22 @@ pub fn determine_game_version(project_path: &str) -> io::Result<&str> {
 }
 
 /// Check if the patch is compatible with the project based on the game version.
-/// 
+///
 /// # Arguments
 /// * `patch_path`: A string slice that holds the path to the patch file.
 /// * `project_path`: A string slice that holds the path to the project directory.
-/// 
+///
 /// # Returns
 /// A boolean value indicating whether the patch is compatible with the project:
 /// * `true` if the patch is compatible with the game version of the project.
 /// * `false` if the patch is not compatible.
-/// 
+///
 /// # Details
 /// This function:
 /// * Calls `determine_game_version` to get the game version based on the `header.bin` file in the project path.
 /// * Checks if the `patch_path` contains specific substrings that indicate compatibility with the game version.
 /// * Returns `true` if the patch is compatible, otherwise returns `false`.
-/// 
+///
 /// # Example Usage
 /// ```rust
 /// use usage_checks::is_patch_compatible;
@@ -87,21 +89,48 @@ pub fn is_patch_compatible(patch_path: &str, project_path: &str) -> bool {
     }
 }
 
-/// Check if the arm9 has been expanded for the given game version.
+/// Check if the synthOverlay is needed based on the assembly file content.
 /// 
+/// # Arguments
+/// 
+/// * `asm_path`: A string slice that holds the path to the assembly file.
+/// 
+/// # Returns
+/// 
+/// A boolean value indicating whether the synthOverlay is needed:
+/// * `true` if the assembly file contains a line with `.open "unpacked/synthOverlay/"`.
+/// * `false` if the assembly file does not contain such a line.
+pub fn needs_synthoverlay(asm_path: &str) -> bool {
+    let input = BufReader::new(
+        fs::File::open(asm_path).unwrap_or_else(|_| panic!("Failed to open {asm_path}")),
+    );
+    let mut lines: Vec<String> = Vec::new();
+
+    for line in input.lines() {
+        let line = line.expect("Failed to read line");
+        if line.contains(".open \"unpacked/synthOverlay/") {
+            return true;
+        }
+        lines.push(line);
+    }
+    false
+}
+
+/// Check if the arm9 has been expanded for the given game version.
+///
 /// # Arguments
 /// * `project_path`: A string slice that holds the path to the project directory where `arm9.bin` is located.
 /// * `game_version`: A string slice that holds the game version, which can be one of:
-/// * `"HeartGold"`
-/// * `"SoulSilver"`
-/// * `"Platinum"`
-/// 
+///     * `"HeartGold"`
+///     * `"SoulSilver"`
+///     * `"Platinum"`
+///
 /// # Returns
 /// A `Result<bool, io::Error>` where:
 /// * `Ok(true)` indicates that the arm9 has been expanded for the specified game version.
 /// * `Ok(false)` indicates that the arm9 has not been expanded for the specified game version.
 /// * `Err(io::Error)` indicates an error occurred while trying to read the `arm9.bin` file, such as the file not being found or an unknown game version being specified.
-/// 
+///
 /// # Details
 /// This function:
 /// * Constructs the path to `arm9.bin` by appending it to the provided `project_path`.
@@ -110,7 +139,7 @@ pub fn is_patch_compatible(patch_path: &str, project_path: &str) -> bool {
 /// * If the bytes match, it returns `Ok(true)` indicating the arm9 has been expanded.
 /// * If the bytes do not match, it returns `Ok(false)` indicating the arm9 has not been expanded.
 /// * If the file cannot be opened or the game version is unknown, it returns an `Err` with an appropriate error message.
-/// 
+///
 /// # Example Usage
 /// ```rust
 /// use usage_checks::is_arm9_expanded;
@@ -134,33 +163,50 @@ pub fn is_arm9_expanded(project_path: &str, game_version: &str) -> io::Result<bo
     let mut buf = [0u8; 4];
 
     match game_version {
-        HEARTGOLD | SOULSILVER => {
-            fs::File::open(&arm9_path).map_or_else(|_| {
+        HEARTGOLD | SOULSILVER => fs::File::open(&arm9_path).map_or_else(
+            |_| {
                 eprintln!("arm9.bin not found at path: {}", arm9_path.display());
-                Err(io::Error::new(io::ErrorKind::NotFound, "arm9.bin not found"))
-            }, |mut file| {
-                if file.seek(SeekFrom::Start(0xCD0)).is_ok() && file.read_exact(&mut buf).is_ok() && buf == [0x0F, 0xF1, 0x30, 0xFB] {
+                Err(io::Error::new(
+                    io::ErrorKind::NotFound,
+                    "arm9.bin not found",
+                ))
+            },
+            |mut file| {
+                if file.seek(SeekFrom::Start(0xCD0)).is_ok()
+                    && file.read_exact(&mut buf).is_ok()
+                    && buf == [0x0F, 0xF1, 0x30, 0xFB]
+                {
                     Ok(true)
                 } else {
                     Ok(false)
                 }
-            })
-        }
-        PLATINUM => {
-            fs::File::open(&arm9_path).map_or_else(|_| {
+            },
+        ),
+        PLATINUM => fs::File::open(&arm9_path).map_or_else(
+            |_| {
                 eprintln!("arm9.bin not found at path: {}", arm9_path.display());
-                Err(io::Error::new(io::ErrorKind::NotFound, "arm9.bin not found"))
-            }, |mut file| {
-                if file.seek(SeekFrom::Start(0xCB4)).is_ok() && file.read_exact(&mut buf).is_ok() && buf == [0x00, 0xF1, 0xB4, 0xF8] {
+                Err(io::Error::new(
+                    io::ErrorKind::NotFound,
+                    "arm9.bin not found",
+                ))
+            },
+            |mut file| {
+                if file.seek(SeekFrom::Start(0xCB4)).is_ok()
+                    && file.read_exact(&mut buf).is_ok()
+                    && buf == [0x00, 0xF1, 0xB4, 0xF8]
+                {
                     Ok(true)
                 } else {
                     Ok(false)
                 }
-            })
-        }
+            },
+        ),
         _ => {
             eprintln!("Unknown game version: {game_version}");
-            Err(io::Error::new(io::ErrorKind::InvalidInput, "Unknown game version"))
+            Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "Unknown game version",
+            ))
         }
     }
 }

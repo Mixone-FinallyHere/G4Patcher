@@ -4,6 +4,8 @@ use std::{fs, io};
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use crate::constants::{GAME_DEPENDENT_OVERLAY_HG, GAME_DEPENDENT_OVERLAY_PLAT};
+use crate::enter_to_exit;
+use crate::usage_checks::is_arm9_expanded;
 
 /// Determine the game overlay based on the patch name.
 /// 
@@ -107,4 +109,61 @@ pub fn insert_corrected_offset(asm_path: &str, new_addr: u32) -> io::Result<Path
     let out_path = PathBuf::from(asm_path);
     fs::write(&out_path, lines.join("\n"))?;
     Ok(out_path)
+}
+
+/// Handle the synthOverlay process for the specified patch and project.
+/// 
+/// # Arguments
+/// 
+/// * `patch_path`: A string slice that holds the path to the patch file.
+/// * `project_path`: A string slice that holds the path to the project directory.
+/// * `game_version`: A string slice that holds the game version, which can be one of:
+///     * `"Platinum"`  
+///     * `"HeartGold"`
+///     * `"SoulSilver"`
+/// 
+/// # Returns
+/// 
+/// A `Result<(), io::Error>` where:
+/// * `Ok(())` indicates the process completed successfully.
+/// * `Err(io::Error)` indicates an error occurred during the process, such as file not found or read/write errors.
+/// 
+/// # Details
+/// 
+/// This function checks if the `arm9.bin` file has been expanded for the specified game version. If it has, it reads the `synthOverlay` file corresponding to the patch, finds the injection offset, and inserts a corrected offset into the assembly file specified by `patch_path`. If the `arm9.bin` is not expanded, it prompts the user to expand it before proceeding.
+pub fn handle_synthoverlay(patch_path: &str, project_path: &str, game_version: &str, ) -> io::Result<()> {
+
+    // Check if the arm9 is expanded, if not, prompt the user to expand it
+    if is_arm9_expanded(project_path, game_version)? {
+        println!("arm9 is expanded, proceeding");
+    } else {
+        println!("arm9 is not expanded, please expand it before running this tool.");
+        return enter_to_exit();
+    }
+
+    // Read and process the synthOverlay file
+    let synth_overlay_path = format!(
+        "{}/unpacked/synthOverlay/{}",
+        project_path,
+        determine_game_overlay(patch_path)
+    );
+    let synth_overlay = fs::read(&synth_overlay_path)?;
+    println!(
+        "Read synthOverlay file successfully. Located at: {:?}",
+        &synth_overlay_path
+    );
+    println!("Searching for injection offset");
+    let offset =
+        find_injection_offset(&synth_overlay, 0x1000).expect("Failed to find injection offset");
+    println!(
+        "Found injection offset at {:#X} in synthOverlay {}",
+        offset,
+        determine_game_overlay(patch_path)
+    );
+
+    let corrected_offset = 0x23c8000 + offset as u32;
+    println!("Corrected offset: {corrected_offset:#X}");
+    insert_corrected_offset(patch_path, corrected_offset)
+        .expect("Failed to correct offset in asm file");
+    Ok(())
 }
