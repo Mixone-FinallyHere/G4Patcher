@@ -1,4 +1,5 @@
 ; EVIV_PLAT.asm
+; EV+IV checker by Kalaay
 
 .nds
 .thumb
