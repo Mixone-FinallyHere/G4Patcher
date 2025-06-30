@@ -20,7 +20,7 @@
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
-.ascii "ButtonScript"
+.ascii "ButtonScript_start"
 
 AButton equ 1
 BButton equ 2
@@ -63,5 +63,7 @@ PortaPC:
         pop  {r3, r4, r5, r6, r7, pc}
 
 .pool
+
+.ascii "ButtonScript_end"
 
 .close

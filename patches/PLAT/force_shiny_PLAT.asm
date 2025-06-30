@@ -27,7 +27,7 @@ CreateWildMonShinyWithGenderOrNature equ 0x02241BAC
 
 INJECT_ADDR equ 0x023C8020
 .org INJECT_ADDR
-.ascii "force_shiny"
+.ascii "force_shiny_start"
 .align 2
 hook:
     push {r0-r3, lr}
@@ -59,4 +59,7 @@ forceShiny:
     add sp, #0x10 ; Cleanup parameters
     pop {r4-r7, pc} ; pop and return, stack should now be in original state before CreateWildMon was called
 .pool
+
+.ascii "force_shiny_end"
+
 .close

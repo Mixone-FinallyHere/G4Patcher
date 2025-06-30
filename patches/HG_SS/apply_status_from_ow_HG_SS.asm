@@ -44,7 +44,7 @@ MON_DATA_STATUS_CONDITION equ 160
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
-.ascii "status_from_ow"
+.ascii "status_from_ow_start"
 .align 2
 apply_status_from_ow:
     push {r4, r5, r6, r7, lr}
@@ -85,4 +85,7 @@ apply_status_from_ow:
     pop {r4, r5, r6, r7, pc} ; pop registers and return
 
 .pool
+
+.ascii "status_from_ow_end"
+
 .close

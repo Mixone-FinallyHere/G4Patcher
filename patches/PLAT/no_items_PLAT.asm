@@ -17,8 +17,9 @@
 
 INJECT_ADDR equ 0x023C8170
 .org INJECT_ADDR    ; Put function at defined offset
-.ascii "no_items"
+.ascii "no_items_start"
 .align 2
+
 no_items:
     push {lr}
     bl 0x0223DF0C    ; BattleSystem_BattleType
@@ -27,8 +28,13 @@ no_items:
     bne ai
     mov r1,#0x01
     b end
-    ai: 
+
+ai:
     mov r1,#0x84
-    end: pop {pc}
+
+end:
+    pop {pc}
+
+.ascii "no_items_end"
 
 .close

@@ -32,7 +32,7 @@ UpdateWeatherAnimation equ 0x021D5F7C
 
 INJECT_ADDR equ 0x023C8070
 .org INJECT_ADDR
-.ascii "dyn_enc_weath"
+.ascii "dyn_enc_weath_start"
 .align 2
 dyn_enc_weath:
     push {r4, r5, r6, r7, lr}
@@ -84,4 +84,7 @@ dyn_enc_weath:
     pop {r4, r5, r6, r7, pc} ; pop registers and return
 
 .pool
+
+.ascii "dyn_enc_weath_end"
+
 .close

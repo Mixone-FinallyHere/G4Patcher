@@ -1,37 +1,37 @@
-//
-//	LEVEL CAP PATCH FOR POKEMON PLATINUM
-//			made by Memory5ty7
-//	 	  Please credit if used
-//
+;
+;	LEVEL CAP PATCH FOR POKEMON PLATINUM
+;			made by Memory5ty7
+;	 	  Please credit if used
+;
 
-// 		INSTALLATION
-// 
-// - Modify the VarNum variable below to match your DSPRE settings
-// - Modify the game scripts using DSPRE to set the selected variable to the level cap you want (the levelcap is 0 by default)
-//
-// - If the patch doesnt work, DM me on Discord (memory5ty7) or join my Discord Server (http://discord.gg/9VQTJEyVZu) for help
-//
+; 		INSTALLATION
+;
+; - Modify the VarNum variable below to match your DSPRE settings
+; - Modify the game scripts using DSPRE to set the selected variable to the level cap you want (the levelcap is 0 by default)
+;
+; - If the patch doesnt work, DM me on Discord (memory5ty7) or join my Discord Server (http://discord.gg/9VQTJEyVZu) for help
+;
 
-//  	CONFIGURATION
+;  	    CONFIGURATION
 
-	VarNum equ 16422 							// Variable used for the level cap
+	VarNum equ 16422 							; Variable used for the level cap
 
-//		CREDITS
-//
-//	PokePlat (JimB16) 		: Unfinished disassembly of Pokemon Platinum
-//	hg-engine (various) 	: Research on variables and level caps
-//	BluRose, Lhea			: ASM Explanations
-//	Kingdom of DS Hacking	: Gold Mine of useful information about Pokémon Rom Hacking
-//
+;		CREDITS
+;
+;	PokePlat (JimB16) 		: Unfinished disassembly of Pokemon Platinum
+;	hg-engine (various) 	: Research on variables and level caps
+;	BluRose, Lhea			: ASM Explanations
+;	Kingdom of DS Hacking	: Gold Mine of useful information about Pokémon Rom Hacking
+;
 
-// 	START OF CUSTOM CODE - DO NOT MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING
+; 	START OF CUSTOM CODE - DO NOT MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING
 
 .nds
 .thumb
 
 .open "arm9.bin", 0x02000000
 
-.org 0x2096558		// Rare Candy repoint
+.org 0x2096558		; Rare Candy repoint
 
 	bl candycheck
 	
@@ -41,7 +41,7 @@
 
 .open "overlay/overlay_0016.bin", 0x0223B140
 
-.org 0x2249008		// In-Battle EXP repoint
+.org 0x2249008		; In-Battle EXP repoint
 
 	bl inbattlecheck
 	
@@ -51,7 +51,7 @@
 
 INJECT_ADDR equ 0x023C8B20
 .org INJECT_ADDR
-.ascii "LevelCaps"
+.ascii "LevelCaps_start"
 .align 2
 
 inbattlecheck:
@@ -113,6 +113,8 @@ getscriptvar:
 	
 .pool
 
+.ascii "LevelCaps_end"
+
 .close
 
-//  END OF CUSTOM CODE
+;  END OF CUSTOM CODE

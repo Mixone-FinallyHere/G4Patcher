@@ -31,7 +31,7 @@ XButton equ 1024
 
 INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
-.ascii "EV+IV Viewer"
+.ascii "EV+IV_Viewer_start"
 
 EV_IV_Viewer:
 
@@ -155,5 +155,7 @@ normal_return:
 ;    .ascii "no\0"
 
 .pool
+
+.ascii "EV+IV_Viewer_end"
 
 .close
