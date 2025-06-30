@@ -1,7 +1,7 @@
 #![warn(clippy::nursery, clippy::pedantic)]
 
 use crate::constants::{
-    HEARTGOLD, HEARTGOLD_BYTES, PLATINUM, PLATINUM_BYTES, SOULSILVER, SOUSILVER_BYTES,
+    HEARTGOLD, HEARTGOLD_BYTES, PLATINUM, PLATINUM_BYTES, SOULSILVER, SOULSILVER_BYTES,
 };
 use std::io::{BufRead, BufReader, Read, Seek, SeekFrom};
 use std::path::PathBuf;
@@ -37,16 +37,15 @@ pub fn determine_game_version(project_path: &str) -> io::Result<&str> {
             .expect("Failed to seek in header.bin");
         file.read_exact(&mut buf)
             .expect("Failed to read from header.bin");
-        if buf == PLATINUM_BYTES {
-            Ok(PLATINUM)
-        } else if buf == HEARTGOLD_BYTES {
-            Ok(HEARTGOLD)
-        } else if buf == SOUSILVER_BYTES {
-            Ok(SOULSILVER)
-        } else {
-            eprintln!("Unknown game version in header.bin at path: {}\nBytes found:{:02X} {:02X} {:02X} {:02X}",
-                   header_path.display(), buf[0], buf[1], buf[2], buf[3]);
-            Err(io::Error::new(io::ErrorKind::InvalidData, "Unknown game version in header.bin"))
+        match buf {
+            PLATINUM_BYTES => Ok(PLATINUM),
+            HEARTGOLD_BYTES => Ok(HEARTGOLD),
+            SOULSILVER_BYTES => Ok(SOULSILVER),
+            _ => {
+                eprintln!("Unknown game version in header.bin at path: {}\nBytes found:{:02X} {:02X} {:02X} {:02X}",
+                       header_path.display(), buf[0], buf[1], buf[2], buf[3]);
+                Err(io::Error::new(io::ErrorKind::InvalidData, "Unknown game version in header.bin"))
+            }
         }
     })
 }
