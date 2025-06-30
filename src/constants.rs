@@ -12,7 +12,7 @@ pub const PLATINUM_BYTES: [u8; 4] = [0x43, 0x50, 0x55, 0x45]; // "CPUE" in bytes
 pub const HEARTGOLD_BYTES: [u8; 4] = [0x49, 0x50, 0x4B, 0x45]; // "IPKE" in bytes
 
 /// The header bytes for Pokémon SoulSilver.
-pub const SOUSILVER_BYTES: [u8; 4] = [0x49, 0x50, 0x47, 0x45]; // "IPGE" in bytes
+pub const SOULSILVER_BYTES: [u8; 4] = [0x49, 0x50, 0x47, 0x45]; // "IPGE" in bytes
 
 pub const PLATINUM: &str = "Platinum";
 pub const HEARTGOLD: &str = "HeartGold";
