@@ -130,7 +130,7 @@ refresh_screen:
     pop     {r0}
     mov     r1,  #0x0
     bl      0x0208a2c0 ; ChangeSummaryMon(summaryScreen, 0) ; refreshes the summary screen
-    mov     r0,  #0x2
+	mov     r0, #0x13
     pop     {r4, r5, r6, pc}
 
 normal_return:
