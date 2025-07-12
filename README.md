@@ -102,7 +102,7 @@ The message shown will be the same as when you try to use items in a link battle
 ### 3.6 AI Item use fix (PLAT)
 
 Have you ever noticed that the AI uses items in battle in a weird way? This is actually because the AI routine that is supposed to determine what item a trainer should use is bugged.
-Under certain (common) conditions, the AI will use up all of its items at once.
+Under certain (common) conditions, the AI will use up all of its items at once. This patch fixes that bug.
 
 ### 3.7 Force wild encounters to be shiny (PLAT)
 
@@ -113,7 +113,13 @@ You can change the flag in the patch file before applying.
 
 A certain variable (16422 by default) dictates if Pokémon can gain EXP. If the Pokémon's level is higher than the cap it won't gain any EXP anymore. (The Daycare is an exception to this)
 
+### 3.9 Rare Candy Chaining (HG/SS/PLAT)
+
+Keeps the party menu open after using a Rare Candy, allowing you to use multiple Rare Candies in a row without having to select the item from the bag again.
+For technical reasons, we have to return to the bag after a Pokémon evolves.
+
 (more to come)
+
 
 ## 4. Contributing:
 
