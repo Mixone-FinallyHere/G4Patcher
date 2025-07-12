@@ -20,9 +20,11 @@ DPadDown equ 128
 RButton equ 256
 LButton equ 512
 XButton equ 1024
+INJECT_ADDR equ 0x023C8000
 
 
 ; ------- Inject hook into arm9.bin -------
+.ifdef PATCH
 .open "arm9.bin", 0x02000000
 
 .org 0x0208ca34
@@ -34,13 +36,16 @@ XButton equ 1024
     bl check_current_mode ; SetMonDataFromMon function, hook into stat fetching
 
 .close
-
+.endif
 
 ; ------- Write function to synthOverlay 0009 -------
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000
+.endif
 
 
-INJECT_ADDR equ 0x023C8000
 .org INJECT_ADDR
 .ascii "EV+IV_Viewer_start"
 

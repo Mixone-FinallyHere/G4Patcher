@@ -131,7 +131,7 @@ pub fn insert_corrected_offset(asm_path: &str, new_addr: u32) -> io::Result<Path
 /// # Details
 /// 
 /// This function checks if the `arm9.bin` file has been expanded for the specified game version. If it has, it reads the `synthOverlay` file corresponding to the patch, finds the injection offset, and inserts a corrected offset into the assembly file specified by `patch_path`. If the `arm9.bin` is not expanded, it prompts the user to expand it before proceeding.
-pub fn handle_synthoverlay(patch_path: &str, project_path: &str, game_version: &str, ) -> io::Result<()> {
+pub fn handle_synthoverlay(patch_path: &str, project_path: &str, game_version: &str, required_size: usize) -> io::Result<()> {
 
     // Check if the arm9 is expanded, if not, prompt the user to expand it
     if is_arm9_expanded(project_path, game_version)? {
@@ -140,21 +140,19 @@ pub fn handle_synthoverlay(patch_path: &str, project_path: &str, game_version: &
         println!("arm9 is not expanded, please expand it before running this tool.");
         return enter_to_exit();
     }
-
     // Read and process the synthOverlay file
     let synth_overlay_path = format!(
-        "{}/unpacked/synthOverlay/{}",
+        "{}\\unpacked\\synthOverlay\\{}",
         project_path,
         determine_game_overlay(patch_path)
     );
     let synth_overlay = fs::read(&synth_overlay_path)?;
     println!(
-        "Read synthOverlay file successfully. Located at: {:?}",
-        &synth_overlay_path
+        "Read synthOverlay file successfully. Located at: {synth_overlay_path}"
     );
     println!("Searching for injection offset");
     let offset =
-        find_injection_offset(&synth_overlay, 0x1000).expect("Failed to find injection offset");
+        find_injection_offset(&synth_overlay, required_size).expect("Failed to find injection offset");
     println!(
         "Found injection offset at {:#X} in synthOverlay {}",
         offset,

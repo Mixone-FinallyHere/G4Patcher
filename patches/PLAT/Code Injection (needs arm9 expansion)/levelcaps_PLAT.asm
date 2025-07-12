@@ -29,6 +29,9 @@
 .nds
 .thumb
 
+INJECT_ADDR equ 0x023C8B20
+
+.ifdef PATCH
 .open "arm9.bin", 0x02000000
 
 .org 0x2096558		; Rare Candy repoint
@@ -46,10 +49,15 @@
 	bl inbattlecheck
 	
 .close
+.endif
 
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000
+.endif
 
-INJECT_ADDR equ 0x023C8B20
+
 .org INJECT_ADDR
 .ascii "LevelCaps_start"
 .align 2

@@ -17,6 +17,8 @@ ScriptVar_8005 equ 0x8005 ; Script variable 0x8005
 
 MON_DATA_STATUS_CONDITION equ 160
 
+INJECT_ADDR equ 0x023C8000
+
 ; Possible status conditions
 ; MON_CONDITION_NONE            0
 ; MON_CONDITION_SLEEP_0         (1 << 0)
@@ -33,19 +35,28 @@ MON_DATA_STATUS_CONDITION equ 160
 ; MON_CONDITION_TOXIC_COUNTER_3 (1 << 11)
 
 
+; ------- Inject hook into arm9.bin -------
+.ifdef PATCH
 .open "arm9.bin", 0x02000000  ; Open arm9.bin
 
 .org 0x020fb090 ; Overwrite pointer in scrcmd (ScrCmd_228)
     .word apply_status_from_ow + 1 ; Pointer to the function in the synth overlay
+
 .close
+.endif
 
-
+; ------- Write function to synthOverlay -------
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0000", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C8000
+
 .org INJECT_ADDR
 .ascii "status_from_ow_start"
 .align 2
+
 apply_status_from_ow:
     push {r4, r5, r6, r7, lr}
     mov r4, r0 ; Save the context pointer

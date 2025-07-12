@@ -1,6 +1,9 @@
 .nds
 .thumb
 
+INJECT_ADDR equ 0x023C8000
+
+.ifdef PATCH
 .open "overlay/overlay_0014.bin", 0x0221FC20  ; Open the trainer AI overlay
 
 .org 0x0222487a
@@ -8,10 +11,15 @@
     bl function
 
 .close
+.endif
 
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C8000
+
 .org INJECT_ADDR
 .ascii "use_item_fix_start"
 .align 2

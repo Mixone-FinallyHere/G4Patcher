@@ -16,16 +16,25 @@ VarsFlags_CheckFlag equ 0x020507F0
 CreateWildMon equ 0x02241CC0
 CreateWildMonShinyWithGenderOrNature equ 0x02241BAC
 
+INJECT_ADDR equ 0x023C8020
+
+.ifdef PATCH
 .open "overlay/overlay_0006.bin", 0x0223E140  ; Open Overlay 6
 
 .org 0x02241CC2
+
     bl hook
     sub sp, #0x14
+
 .close
+.endif
 
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C8020
 .org INJECT_ADDR
 .ascii "force_shiny_start"
 .align 2

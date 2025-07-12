@@ -7,21 +7,31 @@
 ; External function declarations
 Bag_HasItem equ 0x020784B0
 
+INJECT_ADDR equ 0x023C8100
+
 ; Open arm9
+.ifdef PATCH
 .open "arm9.bin", 0x02000000  
 
 ; Branch to hook
 .org 0x02081ea2
+
     bl hook
+
 .close
+.endif
 
 ; Open the synth overlay
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0000", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C8100
 .org INJECT_ADDR
 .ascii "chain_candy_start"
 .align 2
+
 .func hook
     push {r5, lr}
     strb r0,[r1,#0x0]
@@ -49,5 +59,7 @@ exit:
     pop {r5, pc}
 .endfunc
 .pool
+
+.ascii "chain_candy_end"
 
 .close

@@ -4,12 +4,14 @@ mod constants;
 mod synthoverlay_utils;
 mod usage_checks;
 
+use std::fs;
 use rfd::FileDialog;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use usage_checks::{determine_game_version, is_patch_compatible, needs_synthoverlay};
-use crate::synthoverlay_utils::handle_synthoverlay;
+use synthoverlay_utils::handle_synthoverlay;
+use constants::{PATCH_DIRECTIVE, PREASSEMBLE_DIRECTIVE};
 
 fn get_project_path() -> PathBuf {
     // Use rfd to open a file dialog and select the project path
@@ -53,28 +55,29 @@ fn get_patch_path(exe_dir: &Path, game_version: &str) -> PathBuf {
                 std::process::exit(0);
             },
             |selected_patch| {
-                println!("Selected patch: {}", selected_patch.display());
+                println!("\nSelected patch: {}", selected_patch.display());
                 selected_patch
             },
         )
 }
 
-fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &Path) -> io::Result<()> {
-    println!("Running armips...");
-
+fn run_armips(asm_path: &str, rom_dir: &str, exe_dir: &Path, armips_directive: &str) -> io::Result<()> {
     let armips_path = exe_dir.join("assets").join("armips.exe");
-    println!("Using armips at: {}", armips_path.display());
-
-    let status = Command::new(armips_path)
-        .arg(asm_path)
-        .current_dir(rom_dir)
-        .status()?;
-
-    if !status.success() {
-        println!("armips failed with exit code: {}", status.code().unwrap());
-        return Err(io::Error::other("armips failed to run"));
+    //println!("Using armips at: {}", armips_path.display());
+    
+    if armips_directive == PREASSEMBLE_DIRECTIVE { 
+        println!("Calculating patch size...");
+        Command::new(armips_path)
+            .args([asm_path, "-definelabel", PREASSEMBLE_DIRECTIVE, "1"])
+            .current_dir(rom_dir)
+            .status()?;
+    } else {
+        println!("Patching ROM with armips...");
+        Command::new(armips_path)
+            .args([asm_path, "-definelabel", PATCH_DIRECTIVE, "1"])
+            .current_dir(rom_dir)
+            .status()?;
     }
-
     Ok(())
 }
 
@@ -109,14 +112,22 @@ fn main() -> io::Result<()> {
     }
     
     if needs_synthoverlay(&patch_path) {
-        handle_synthoverlay(&patch_path, &project_path, game_version)?;
+        // preassemble the patch to calculate the size from the created temp.bin
+        if !matches!(run_armips(&patch_path, &project_path, &exe_dir, PREASSEMBLE_DIRECTIVE), Ok(())) {
+            return enter_to_exit();
+        }
+        let patch_size = fs::metadata(format!("{project_path}/temp.bin"))
+            .map_err(|e| io::Error::new(io::ErrorKind::NotFound, format!("Failed to read temp.bin: {}", e)))?
+            .len() as usize;
+        println!("Patch size: {patch_size} bytes");
+        fs::remove_file(format!("{project_path}/temp.bin"))
+            .map_err(|e| io::Error::new(io::ErrorKind::NotFound, format!("Failed to delete temp.bin: {e}")))?;
+        handle_synthoverlay(&patch_path, &project_path, game_version, patch_size)?;
     }
 
-    if matches!(run_armips(&patch_path, &project_path, &exe_dir), Ok(())) {
+    if matches!(run_armips(&patch_path, &project_path, &exe_dir, PATCH_DIRECTIVE), Ok(())) {
         println!("\narmips ran successfully, patch applied! You can now repack your ROM.\n");
-    } else {
-        return enter_to_exit();
-    }
+    } 
 
     enter_to_exit()
 }

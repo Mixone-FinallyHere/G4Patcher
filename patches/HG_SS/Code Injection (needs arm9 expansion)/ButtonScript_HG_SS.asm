@@ -3,25 +3,6 @@
 .nds
 .thumb
 
-; ------- Inject hook into arm9.bin -------
-.open "overlay/overlay_0001.bin", 0x021E5900
-
-.org 0x021E6D9E
-
-    add r1, r4, #0
-    bl PortaPC
-
-.close
-
-
-; ------- Write function to synthOverlay 0000 -------
-.open "unpacked/synthOverlay/0000", 0x023C8000
-
-
-INJECT_ADDR equ 0x023C8000
-.org INJECT_ADDR
-.ascii "ButtonScript_start"
-
 AButton equ 1
 BButton equ 2
 SelectButton equ 4
@@ -33,6 +14,31 @@ DPadDown equ 128
 RButton equ 256
 LButton equ 512
 XButton equ 1024
+
+INJECT_ADDR equ 0x023C8000
+
+; ------- Inject hook into arm9.bin -------
+.ifdef PATCH
+.open "overlay/overlay_0001.bin", 0x021E5900
+
+.org 0x021E6D9E
+
+    add r1, r4, #0
+    bl PortaPC
+
+.close
+.endif
+
+; ------- Write function to synthOverlay 0000 -------
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
+.open "unpacked/synthOverlay/0000", 0x023C8000
+.endif
+
+
+.org INJECT_ADDR
+.ascii "ButtonScript_start"
 
 PortaPC:
     push {r3, r4, r5, r6, r7, lr}

@@ -7,18 +7,28 @@
 ; External function declarations
 Bag_CanRemoveItem equ 0x0207D688
 
+INJECT_ADDR equ 0x023C8000
+
 ; Open arm9
+.ifdef PATCH
 .open "arm9.bin", 0x02000000  
 
 ; Branch to hook
 .org 0x02085ec6
+
     bl hook
+
 .close
+.endif
 
 ; Open the synth overlay
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C9550
+
 .org INJECT_ADDR
 .ascii "chain_candy_start"
 .align 2

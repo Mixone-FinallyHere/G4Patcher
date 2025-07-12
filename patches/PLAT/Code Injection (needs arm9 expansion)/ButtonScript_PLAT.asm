@@ -3,24 +3,11 @@
 .nds
 .thumb
 
-; ------- Inject hook into arm9.bin -------
-.open "overlay/overlay_0005.bin", 0x021D0D80
+; Settings:
+PressedButton equ StartButton
+ScriptID equ 2058 ; (Commonscript ID)
 
-.org 0x021D20CC
-
-    add r1, r4, #0
-    bl PortaPC
-
-.close
-
-
-; ------- Write function to synthOverlay 0009 -------
-.open "unpacked/synthOverlay/0009", 0x023C8000
-
-INJECT_ADDR equ 0x023C8000
-.org INJECT_ADDR
-.ascii "ButtonScript_start"
-
+; Button definitions:
 AButton equ 1
 BButton equ 2
 SelectButton equ 4
@@ -33,12 +20,38 @@ RButton equ 256
 LButton equ 512
 XButton equ 1024
 
+INJECT_ADDR equ 0x023C8000
+
+; ------- Inject hook into arm9.bin -------
+.ifdef PATCH
+.open "overlay/overlay_0005.bin", 0x021D0D80
+
+.org 0x021D20CC
+
+    add r1, r4, #0
+    bl PortaPC
+
+.close
+.endif
+
+
+; ------- Write function to synthOverlay 0009 -------
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
+.open "unpacked/synthOverlay/0009", 0x023C8000
+.endif
+
+
+.org INJECT_ADDR
+.ascii "ButtonScript_start"
+
 PortaPC:
     add  r4, r1, #0         ; putting fieldSystem back into r4
 
     ldr  r3, =0x021BF67C    ; r3 = gSystem
     ldr  r2, [r3, #0x48]    ; r2 = gSystem->newKeys
-    ldr r3, =StartButton    ; Button bitmask
+    ldr r3, =PressedButton  ; Button bitmask
     tst  r2, r3             ; check if pressed
     bne  call_script
 
@@ -49,7 +62,7 @@ PortaPC:
 call_script:
 
     add r0, r4, #0
-    ldr r1, =0x080A         ; ScriptID: 2058
+    ldr r1, =ScriptID       ; ScriptID: 2058 (default)
     mov r2, #0              ; MapObject = NULL
     bl 0x0203E880           ; ScriptManager_Set(fieldSystem, 2058, NULL)
 

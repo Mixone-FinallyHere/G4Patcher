@@ -4,6 +4,9 @@
 .nds
 .thumb
 
+INJECT_ADDR equ 0x023C8000
+
+.ifdef PATCH
 .open "overlay/overlay_0016.bin", 0x0223B140  ; Open the battle overlay
 
 .org 0x0224be98
@@ -12,10 +15,15 @@
     mov r0,r0
 
 .close
+.endif
 
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
 .open "unpacked/synthOverlay/0009", 0x023C8000  ; Open the synth overlay
+.endif
 
-INJECT_ADDR equ 0x023C8170
+
 .org INJECT_ADDR    ; Put function at defined offset
 .ascii "no_items_start"
 .align 2

@@ -17,3 +17,6 @@ pub const SOULSILVER_BYTES: [u8; 4] = [0x49, 0x50, 0x47, 0x45]; // "IPGE" in byt
 pub const PLATINUM: &str = "Platinum";
 pub const HEARTGOLD: &str = "HeartGold";
 pub const SOULSILVER: &str = "SoulSilver";
+
+pub const PREASSEMBLE_DIRECTIVE: &str = "PREASSEMBLE";
+pub const PATCH_DIRECTIVE: &str = "PATCH";
