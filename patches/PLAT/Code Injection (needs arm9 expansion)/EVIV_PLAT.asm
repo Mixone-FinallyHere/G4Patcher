@@ -78,6 +78,7 @@ return:
 
 ; ------- Check current mode and write IDs -------
 check_current_mode:
+    mov     r2, r0 ; Save context pointer
     mov     r0, lr
     mov     r1, #0x4C
     add     r0, r0, r1 ; move context pointer up to skip the instructions we replace
@@ -86,6 +87,7 @@ check_current_mode:
     ; Load current byte at 0x0208d3b6 to determine mode
     ldr     r0, =stats
     ldrb    r1, [r0]
+    mov     r0, r2 ; Restore context pointer
 
     ; Check if it's IV mode, write EV IDs
     cmp     r1, #2
