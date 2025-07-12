@@ -38,11 +38,15 @@ Make sure that:
 2. The patch includes this type of structure:
 ```asm
 INJECT_ADDR equ 0x023C8000
+
 ...
+
 .ifdef PATCH
 // hook here
 .endif
+
 ...
+
 .ifdef PREASSEMBLE
 .create "temp.bin", 0x023C8000
 .elseifdef PATCH
