@@ -34,10 +34,21 @@ can now be found [in the wiki](https://github.com/KalaayPT/G4Patcher/wiki/Includ
 If you want to contribute your own patches, you can use the included ones as templates as to what yours are supposed to look like. 
 
 Make sure that:
-1. The patch name is clearly labeled with the ROM it is to be applied to (such as "_HG")
-2. The patch includes a:
+1. The patch name is clearly labeled with the ROM it is to be applied to (such as "_HG" or "_PLAT")
+2. The patch includes this type of structure:
 ```asm
 INJECT_ADDR equ 0x023C8000
+...
+.ifdef PATCH
+// hook here
+.endif
+...
+.ifdef PREASSEMBLE
+.create "temp.bin", 0x023C8000
+.elseifdef PATCH
+.open "unpacked/synthOverlay/0000", 0x023C8000  // 0000 for hg, 0009 for plat
+.endif
+
 .org INJECT_ADDR
 ```
 so that the script is able to adjust the injection address. Future updates will allow patches that don't need a synthetic overlay such as simple hexedits.
