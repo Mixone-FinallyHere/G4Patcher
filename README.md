@@ -35,7 +35,7 @@ If you want to contribute your own patches, you can use the included ones as tem
 
 Make sure that:
 1. The patch name is clearly labeled with the ROM it is to be applied to (such as "_HG" or "_PLAT")
-2. The patch includes this type of structure:
+2. The patch includes this type of structure (only for code injection patches):
 ```asm
 INJECT_ADDR equ 0x023C8000
 
@@ -55,4 +55,4 @@ INJECT_ADDR equ 0x023C8000
 
 .org INJECT_ADDR
 ```
-so that the script is able to adjust the injection address. Future updates will allow patches that don't need a synthetic overlay such as simple hexedits.
+so that the script is able to adjust the injection address and preassemble to calculate patch size.
