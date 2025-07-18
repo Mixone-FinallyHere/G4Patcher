@@ -6,8 +6,10 @@
 
 ; External function declarations
 Bag_HasItem equ 0x020784B0
+Window_EraseMessageBox equ 0x0200E9BC // ClearFrameAndWindow2
+PartyMenu_PrintToWindow32 equ 0x0207DAC4
 
-INJECT_ADDR equ 0x023C8100
+INJECT_ADDR equ 0x023C8000
 
 ; Open arm9
 .ifdef PATCH
@@ -52,6 +54,16 @@ INJECT_ADDR equ 0x023C8100
     mov r0, #40
     add r0, r5
     strh r1, [r0] ; Set the item ID to Rare Candy in the party management data as it may be overwritten when learning a move
+    mov r0, #4
+    mov r0, r4
+    ldr r1, =548
+    add r0, r1 ; r0 = &partyMenu->window[34]
+    mov r1, #0
+    bl Window_EraseMessageBox ; Erase the message box
+    mov r0, r4
+    mov r1, #32
+    mov r2, #1
+    bl PartyMenu_PrintToWindow32 ; Print the message "Use on which Pokémon?" to the window
     mov r0, #4
     pop {r5, pc} ; Return to the caller
 exit:

@@ -93,7 +93,14 @@ fn main() -> io::Result<()> {
 
     // Get the project path from the user
     let project_path = get_project_path().display().to_string();
-    let game_version = determine_game_version(&project_path)?;
+    let game_version = match determine_game_version(&project_path) {
+        Ok(version) => version,
+        Err(e) => {
+            println!("Error determining game version: {e}\nPlease ensure you are selecting the ROM folder, and not the \"unpacked\" folder within it.");
+            enter_to_exit()?;
+            return Ok(());
+        }
+    };
     println!("Game version: {game_version}");
 
     // Get the directory of the executable for the patch file and armips locations
