@@ -89,7 +89,7 @@ fn enter_to_exit() -> Result<(), io::Error> {
 }
 
 fn main() -> io::Result<()> {
-    println!("Welcome to the Platinum/HGSS code injection patcher!\nPlease select your unpacked ROM folder");
+    println!("Welcome to the Platinum/HGSS code injection patcher!\n\nMake sure to read the documentation for the patch you are trying to apply!\n\nPlease select your unpacked ROM folder");
 
     // Get the project path from the user
     let project_path = get_project_path().display().to_string();
