@@ -3,6 +3,14 @@
 .nds
 .thumb
 
+
+; Settings:
+PressedButton equ StartButton
+ScriptID equ 2072 ; (Commonscript ID)
+; ------------------------------------------------------------------------------------
+; DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOURE DOING
+; ------------------------------------------------------------------------------------
+
 AButton equ 1
 BButton equ 2
 SelectButton equ 4
@@ -52,14 +60,14 @@ PortaPC:
         ; Access gSystem->newKeys
         ldr  r3, =0x021D110C    ; r3 = gSystem
         ldr  r2, [r3, #0x48]    ; r2 = gSystem->newKeys
-        ldr r3, =StartButton    ; Button bitmask
+        ldr r3, =PressedButton    ; Button bitmask
         tst  r2, r3             ; check if pressed
         bne  call_script
         pop  {r3, r4, r5, r6, r7, pc}
 
     call_script:
         add r0, r4, #0
-        ldr r1, =0x0818         ; ScriptID: 2072
+        ldr r1, =ScriptID       ; ScriptID: 2072
         mov r2, #0              ; lastInteracted = NULL
         bl 0x0203FE74           ; StartMapSceneScript(fieldSystem, 2072, NULL)
         pop  {r3, r4, r5, r6, r7, pc}

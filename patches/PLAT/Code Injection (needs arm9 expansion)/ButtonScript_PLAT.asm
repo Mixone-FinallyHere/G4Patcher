@@ -6,6 +6,9 @@
 ; Settings:
 PressedButton equ StartButton
 ScriptID equ 2058 ; (Commonscript ID)
+; ------------------------------------------------------------------------------------
+; DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOURE DOING
+; ------------------------------------------------------------------------------------
 
 ; Button definitions:
 AButton equ 1
