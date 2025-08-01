@@ -13,12 +13,24 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 ## 1. Usage:
 
+### CLI
+
 1. Download the latest [release](https://github.com/KalaayPT/g4patcher/releases)
 2. Run G4Patcher
 3. Select your unpacked ROM folder
 4. Select the patch
 5. If everything is fine, youll get a confirmation message, if not, you'll get a message telling you what the issue is
 6. Press Enter to close
+
+### GUI
+
+1. Download the latest [release](https://github.com/KalaayPT/g4patcher/releases)
+2. Run G4Patcher in GUI mode: `bash./g4patcher --gui`
+3. Click "Select ROM Folder" to choose your unpacked ROM folder
+4. Click "Select Patch File" to choose a patch (automatically filters to .asm files in the appropriate game directory)
+5. Click "Apply Patch" to process
+6. View the status message for success or errors
+7. Close the window when done
 
 ## 2. Limitations:
 
@@ -29,7 +41,22 @@ An [armips](https://github.com/Kingcom/armips) binary is bundled into the releas
 
 can now be found [in the wiki](https://github.com/KalaayPT/G4Patcher/wiki/Included-Patches)
 
-## 4. Contributing:
+## 4. Build Instructions:
+
+1. Install Rust and Cargo: Follow the instructions at https://www.rust-lang.org/tools/install
+2. Clone the repository:
+```bash
+git clone https://github.com/KalaayPT/G4Patcher.git
+cd G4Patcher
+```
+3. Build the project:
+```bash
+cargo build --release
+```
+4. Find the executable in target/release/g4patcher
+5. Run the CLI or GUI as described in the Usage sections
+
+## 5. Contributing:
 
 If you want to contribute your own patches, you can use the included ones as templates as to what yours are supposed to look like. 
 
